@@ -1,24 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-function App() {
+import { Post } from './types';
+import { PostList } from './components/posts-list/PostList';
+import './App.css';
+import { fetchPosts } from './store/actions';
+import { MyState } from './store/types';
+import { Loader } from './components/loader/Loader';
+
+function App(): JSX.Element {
+  const dispatch = useDispatch();
+  const isLoading = useSelector((state: MyState) => state.isLoading);
+
+  useEffect(() => {
+    dispatch(fetchPosts());
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {isLoading ? <Loader /> : <PostList />}
+
     </div>
   );
 }
